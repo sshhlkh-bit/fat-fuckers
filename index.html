@@ -786,35 +786,77 @@
         saveState(); renderDaily();
     }
 
-    function renderWorkoutBox() {
-        const box = document.getElementById(`workoutBox`);
-        const wList = WORKOUTS[activeProfile];
-        const currentId = state.workouts[activeProfile][selectedDate];
-        
-        if(currentId) {
-            const w = wList.find(x => x.id === currentId);
-            box.innerHTML = `
-                <div class="flex justify-between items-center mb-3">
-                    <h4 class="font-bold text-[16px]">${w.title}</h4>
-                    <button onclick="removeWorkout()" class="text-[#FF3B30] active:opacity-50 p-2"><i class="ph-bold ph-trash text-xl"></i></button>
-                </div>
-                <iframe class="w-full aspect-video rounded-xl border border-gray-100 shadow-sm" src="${w.url}" frameborder="0" allowfullscreen></iframe>
-                <div class="mt-4 text-center text-[13px] font-bold text-[#34C759] uppercase tracking-wider flex items-center justify-center gap-1"><i class="ph-fill ph-check-circle text-lg"></i> Выполнено</div>
-            `;
-        } else {
-            let opts = '<option value="">Выбрать тренировку...</option>';
-            wList.forEach(w => opts += `<option value="${w.id}">${w.title}</option>`);
-            box.innerHTML = `
-                <select class="ios-select ios-input mb-4" onchange="setWorkout(this.value)">${opts}</select>
-                <div class="w-full aspect-video bg-gray-50 rounded-xl flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-200">
-                    <i class="ph-fill ph-play-circle text-[60px]"></i>
-                </div>
-            `;
-        }
+    // Авто-расчет тренировки по дате (зацикливание)
+    function getDefaultWorkout(dateStr, profile) {
+        const startDate = new Date('2024-01-01'); // Отсчет цикла
+        const targetDate = new Date(dateStr);
+        const diffTime = Math.abs(targetDate - startDate);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const list = WORKOUTS[profile];
+        return list[diffDays % list.length];
     }
 
-    function setWorkout(id) { if(!id) return; state.workouts[activeProfile][selectedDate] = id; saveState(); renderDaily(); }
-    function removeWorkout() { delete state.workouts[activeProfile][selectedDate]; saveState(); renderDaily(); }
+    function renderWorkoutBox() {
+        const box = document.getElementById(`workoutBox`);
+        const p = activeProfile;
+        const wList = WORKOUTS[p];
+        
+        // Получаем ручной выбор или берем автоматический по кругу
+        const manualSelection = state.workouts[p][selectedDate];
+        const isRestDay = manualSelection === 'rest';
+        
+        let currentW = null;
+        if(isRestDay) {
+            currentW = null;
+        } else if (manualSelection) {
+            currentW = wList.find(x => x.id === manualSelection);
+        } else {
+            currentW = getDefaultWorkout(selectedDate, p);
+        }
+
+        // Генерируем опции для селекта замены
+        let opts = `<option value="auto" ${!manualSelection ? 'selected' : ''}>По плану (${getDefaultWorkout(selectedDate, p).title})</option>`;
+        opts += `<option value="rest" ${isRestDay ? 'selected' : ''}>🌴 Выходной (отдых)</option>`;
+        wList.forEach(w => opts += `<option value="${w.id}" ${manualSelection === w.id ? 'selected' : ''}>${w.title}</option>`);
+
+        let contentHtml = '';
+        
+        if (isRestDay) {
+            contentHtml = `
+                <div class="w-full aspect-video bg-blue-50 rounded-xl flex flex-col items-center justify-center text-[#007AFF] border-2 border-dashed border-blue-200">
+                    <i class="ph-fill ph-coffee text-[60px] mb-2"></i>
+                    <p class="font-bold text-[15px]">Сегодня выходной!</p>
+                </div>
+            `;
+        } else if (currentW) {
+            contentHtml = `
+                <iframe class="w-full aspect-video rounded-xl border border-gray-100 shadow-sm" src="${currentW.url}" frameborder="0" allowfullscreen></iframe>
+                <button class="mt-4 w-full py-3 rounded-[12px] bg-[#E5E5EA] text-[#34C759] font-bold text-[15px] flex items-center justify-center gap-2 active:opacity-70 transition" onclick="showToast('Отлично позанимались! 💪', 'success')">
+                    <i class="ph-fill ph-check-circle text-xl"></i> Отметить выполнение
+                </button>
+            `;
+        }
+
+        box.innerHTML = `
+            <div class="flex justify-between items-center mb-3">
+                <h4 class="font-bold text-[16px]">Тренировка</h4>
+                <select class="ios-select !bg-gray-100 !py-1 !px-2 !text-[13px] !rounded-lg !w-auto max-w-[150px]" onchange="setWorkout(this.value)">
+                    ${opts}
+                </select>
+            </div>
+            ${contentHtml}
+        `;
+    }
+
+    function setWorkout(val) { 
+        if(val === 'auto') {
+            delete state.workouts[activeProfile][selectedDate];
+        } else {
+            state.workouts[activeProfile][selectedDate] = val; 
+        }
+        saveState(); 
+        renderDaily(); 
+    }
 
     // --- ВКЛАДКА 2: МЕНЮ (ОБЩАЯ) ---
     function changePlannerWeek(offset) {
