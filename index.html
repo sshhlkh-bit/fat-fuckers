@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>FAT FUCKERS</title>
     <!-- Добавлен ваш Favicon -->
-    <link rel="icon" type="image/jpeg" href="favicon1.jpg">
+    <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
@@ -173,7 +173,7 @@
     <!-- Экран авторизации (ПИН КОД) -->
     <div id="authOverlay">
         <div class="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-white shadow-xl">
-            <img src="favicon1.jpg" alt="Fat Fuckers" class="w-full h-full object-cover">
+            <img src="favicon.png" alt="Fat Fuckers" class="w-full h-full object-cover">
         </div>
         <h1 class="ios-title mb-2 text-center">FAT FUCKERS</h1>
         <p class="text-gray-500 mb-8 text-center text-[15px]">Вход только для Сони и Андрея ❤️</p>
@@ -192,20 +192,20 @@
         </div>
         <!-- Иконка переключения профиля (Ваше фото) -->
         <button onclick="toggleProfileMenu()" class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center border-2 border-transparent active:opacity-70 transition ring-2 ring-offset-2 ring-[#007AFF]" id="headerAvatarBtn">
-            <img src="favicon1.jpg" alt="Avatar" class="w-full h-full object-cover" id="headerAvatar">
+            <img src="favicon.png" alt="Avatar" class="w-full h-full object-cover" id="headerAvatar">
         </button>
 
         <!-- Меню выбора профиля -->
         <div id="profileMenu">
             <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Выбрать профиль</div>
             <button onclick="switchActiveProfile('sonya')" class="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-gray-100 transition">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon1.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon.png" class="w-full h-full object-cover"></div>
                 <div class="flex-1"><div class="font-semibold text-[15px]">Соня</div><div class="text-[12px] text-gray-500">1350 ккал</div></div>
                 <i class="ph-fill ph-check-circle text-[#007AFF] text-lg hidden" id="check-sonya"></i>
             </button>
             <div class="h-[1px] bg-gray-100 ml-14"></div>
             <button onclick="switchActiveProfile('andrey')" class="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-gray-100 transition">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon1.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon.png" class="w-full h-full object-cover"></div>
                 <div class="flex-1"><div class="font-semibold text-[15px]">Андрей</div><div class="text-[12px] text-gray-500">2000 ккал</div></div>
                 <i class="ph-fill ph-check-circle text-[#007AFF] text-lg hidden" id="check-andrey"></i>
             </button>
@@ -469,11 +469,11 @@
 
     const WORKOUTS = {
         sonya: [
-            { id: 's1', title: 'Ягодицы и ноги (20 мин)', url: 'https://www.youtube.com/embed/I9nG-G4B5Bs' },
-            { id: 's2', title: 'Пресс и талия', url: 'https://www.youtube.com/embed/1f8yoFFdkcY' },
-            { id: 's3', title: 'Легкое кардио', url: 'https://www.youtube.com/embed/ml6cT4AZdqI' },
-            { id: 's4', title: 'Здоровая спина', url: 'https://www.youtube.com/embed/Eml2xnoLpYE' },
-            { id: 's5', title: 'Фулбоди жиросжигание', url: 'https://www.youtube.com/embed/UBMk30rjy0o' }
+            { id: 's1', title: 'День 1 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's2', title: 'День 2 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's3', title: 'День 3 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's4', title: 'День 4 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's5', title: 'День 5 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' }
         ],
         andrey: [
             { id: 'a1', title: 'Грудные и руки', url: 'https://www.youtube.com/embed/UBMk30rjy0o' },
