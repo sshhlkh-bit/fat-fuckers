@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>FAT FUCKERS</title>
-    <!-- Добавлен ваш Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
@@ -172,8 +172,9 @@
 
     <!-- Экран авторизации (ПИН КОД) -->
     <div id="authOverlay">
-        <div class="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-white shadow-xl">
-            <img src="favicon.png" alt="Fat Fuckers" class="w-full h-full object-cover">
+        <div class="w-32 h-32 rounded-full mb-6 border-4 border-white shadow-xl bg-gray-200 relative flex items-center justify-center overflow-hidden">
+            <span class="text-gray-400 font-bold text-2xl absolute z-0 hidden" id="authAvatarFallback">FF</span>
+            <img src="favicon.png" alt="Fat Fuckers" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'; document.getElementById('authAvatarFallback').classList.remove('hidden');">
         </div>
         <h1 class="ios-title mb-2 text-center">FAT FUCKERS</h1>
         <p class="text-gray-500 mb-8 text-center text-[15px]">Вход только для Сони и Андрея ❤️</p>
@@ -190,22 +191,24 @@
             <h1 class="ios-title tracking-tight text-black" id="headerTitle">План на день</h1>
             <p class="ios-subtext tracking-wide mt-1 font-medium text-[#007AFF]" id="headerSubtext">Смотрим: Соня</p>
         </div>
-        <!-- Иконка переключения профиля (Ваше фото) -->
-        <button onclick="toggleProfileMenu()" class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center border-2 border-transparent active:opacity-70 transition ring-2 ring-offset-2 ring-[#007AFF]" id="headerAvatarBtn">
-            <img src="favicon.png" alt="Avatar" class="w-full h-full object-cover" id="headerAvatar">
+        
+        <!-- Иконка переключения профиля с умной заглушкой -->
+        <button onclick="toggleProfileMenu()" class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center border-2 border-transparent active:opacity-70 transition ring-2 ring-offset-2 ring-[#007AFF] relative overflow-hidden" id="headerAvatarBtn">
+            <span class="text-gray-500 font-bold text-sm absolute z-0 hidden" id="headerAvatarFallback">С/А</span>
+            <img src="favicon.png" alt="Avatar" class="w-full h-full object-cover relative z-10" id="headerAvatar" onerror="this.style.display='none'; document.getElementById('headerAvatarFallback').classList.remove('hidden');">
         </button>
 
         <!-- Меню выбора профиля -->
         <div id="profileMenu">
             <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Выбрать профиль</div>
             <button onclick="switchActiveProfile('sonya')" class="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-gray-100 transition">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon.png" class="w-full h-full object-cover"></div>
+                <div class="w-8 h-8 rounded-full bg-[#007AFF] text-white flex items-center justify-center font-bold text-xs">С</div>
                 <div class="flex-1"><div class="font-semibold text-[15px]">Соня</div><div class="text-[12px] text-gray-500">1350 ккал</div></div>
                 <i class="ph-fill ph-check-circle text-[#007AFF] text-lg hidden" id="check-sonya"></i>
             </button>
             <div class="h-[1px] bg-gray-100 ml-14"></div>
             <button onclick="switchActiveProfile('andrey')" class="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-gray-100 transition">
-                <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"><img src="favicon.png" class="w-full h-full object-cover"></div>
+                <div class="w-8 h-8 rounded-full bg-[#FF9500] text-white flex items-center justify-center font-bold text-xs">А</div>
                 <div class="flex-1"><div class="font-semibold text-[15px]">Андрей</div><div class="text-[12px] text-gray-500">2000 ккал</div></div>
                 <i class="ph-fill ph-check-circle text-[#007AFF] text-lg hidden" id="check-andrey"></i>
             </button>
@@ -233,7 +236,7 @@
 
     <main class="max-w-[600px] mx-auto">
         
-        <!-- ВКЛАДКА 1: ПЛАН НА ДЕНЬ (Динамическая, с бесконечным календарем) -->
+        <!-- ВКЛАДКА 1: ПЛАН НА ДЕНЬ -->
         <div id="tab-daily" class="tab-content active px-5 pt-6">
             
             <!-- Бесконечный Календарь -->
@@ -278,6 +281,7 @@
                 </div>
             </div>
 
+            <!-- Трекеры Воды и Шагов -->
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div class="ios-card p-4">
                     <h4 class="ios-subtext font-semibold uppercase mb-3 flex items-center gap-1"><i class="ph-fill ph-drop text-[#007AFF]"></i> Вода (2Л)</h4>
@@ -305,7 +309,7 @@
                 </button>
             </div>
 
-            <h3 class="ios-h2 mb-4">Моя Тренировка</h3>
+            <h3 class="ios-h2 mb-4">Тренировка</h3>
             <div class="ios-card p-4 mb-6 relative overflow-hidden" id="workoutBox"></div>
         </div>
 
@@ -337,10 +341,10 @@
             </div>
         </div>
 
-        <!-- ВКЛАДКА 4: ПРОГРЕСС (Динамическая) -->
+        <!-- ВКЛАДКА 4: ПРОГРЕСС -->
         <div id="tab-progress" class="tab-content px-5 pt-6">
             <h2 class="ios-h2 mb-4">Аналитика (Последние 7 дней)</h2>
-            <div class="ios-card mb-8">
+            <div class="ios-card mb-8 overflow-x-auto">
                 <table class="w-full text-sm text-left">
                     <thead>
                         <tr class="bg-gray-50 text-gray-500 border-b border-gray-100 text-[12px] uppercase tracking-wider">
@@ -385,6 +389,7 @@
 
     </main>
 
+    <!-- МОДАЛКИ -->
     <div class="modal-overlay" id="customFoodModal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-6">
@@ -439,7 +444,7 @@
     function checkPassword() {
         const pwd = document.getElementById('appPassword').value;
         if(pwd === '246624') { 
-            localStorage.setItem('ff_access_granted_v2', 'true');
+            localStorage.setItem('ff_access_granted_v7', 'true');
             document.getElementById('authOverlay').classList.add('hidden');
         } else {
             document.getElementById('authError').classList.remove('hidden');
@@ -447,7 +452,7 @@
         }
     }
 
-    if(localStorage.getItem('ff_access_granted_v2') === 'true') {
+    if(localStorage.getItem('ff_access_granted_v7') === 'true') {
         document.getElementById('authOverlay').classList.add('hidden');
     }
 
@@ -467,13 +472,18 @@
         }, 3000);
     }
 
+    // --- БАЗА ТРЕНИРОВОК ---
     const WORKOUTS = {
         sonya: [
-            { id: 's1', title: 'День 1 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
-            { id: 's2', title: 'День 2 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
-            { id: 's3', title: 'День 3 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
-            { id: 's4', title: 'День 4 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
-            { id: 's5', title: 'День 5 (из плейлиста)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' }
+            { id: 's1', title: 'Тренировка 1 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's2', title: 'Тренировка 2 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's3', title: 'Тренировка 3 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's4', title: 'Тренировка 4 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's5', title: 'Тренировка 5 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's6', title: 'Тренировка 6 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's7', title: 'Тренировка 7 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's8', title: 'Тренировка 8 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' },
+            { id: 's9', title: 'Тренировка 9 (Плейлист)', url: 'https://www.youtube.com/embed/videoseries?list=PLUV7j0d8hiH3U5zikvJpIAp6B9J7Qr8NL' }
         ],
         andrey: [
             { id: 'a1', title: 'Грудные и руки', url: 'https://www.youtube.com/embed/UBMk30rjy0o' },
@@ -484,7 +494,7 @@
         ]
     };
 
-    // Формат: n: Название, c: Ккал, p: Белки, f: Жиры, cb: Углеводы (на 100г)
+    // --- БАЗА ПРОДУКТОВ (Убрано лишнее, БЖУ на 100г) ---
     const FOOD_DB = [
         // Мясо/Птица/Рыба
         { n: 'Куриная грудка', c: 113, p: 23, f: 2, cb: 0 }, { n: 'Куриное бедро', c: 130, p: 19, f: 6, cb: 0 }, 
@@ -507,20 +517,18 @@
         // Фрукты
         { n: 'Яблоки', c: 47, p: 0, f: 0, cb: 10 }, { n: 'Бананы', c: 89, p: 1, f: 0, cb: 21 }, 
         { n: 'Персики', c: 45, p: 1, f: 0, cb: 10 }, { n: 'Абрикосы', c: 44, p: 1, f: 0, cb: 9 },
-        // Грешки / Вне меню
+        // Грешки
         { n: 'Пиво светлое', c: 43, p: 0, f: 0, cb: 4 }, { n: 'Вино', c: 80, p: 0, f: 0, cb: 3 }, 
-        { n: 'Кола (с сахаром)', c: 42, p: 0, f: 0, cb: 10 }, { n: 'Шоколад', c: 540, p: 5, f: 30, cb: 60 }, 
-        { n: 'Пицца', c: 266, p: 11, f: 10, cb: 33 }, { n: 'Бургер', c: 295, p: 14, f: 14, cb: 30 }, 
-        { n: 'Шаурма', c: 170, p: 9, f: 8, cb: 15 }, { n: 'Мороженое', c: 227, p: 3, f: 15, cb: 20 }
+        { n: 'Кола (с сахаром)', c: 42, p: 0, f: 0, cb: 10 }, { n: 'Пицца', c: 266, p: 11, f: 10, cb: 33 }, 
+        { n: 'Шаурма', c: 170, p: 9, f: 8, cb: 15 }
     ];
 
-    // Рецепты: Без лука, без картошки, без красного мяса. Только разрешенные продукты.
-    // Порции: Соня ~1350 ккал, Андрей ~2000 ккал
+    // --- БАЗА РЕЦЕПТОВ ---
     const RECIPES = [
         { id: 'b1', type: 'b', n: 'Овсянка с бананом', i: [{n:'Овсянка (сухая)', f:40, m:80}, {n:'Бананы', f:80, m:150}], d: 'Овсянку залить кипятком. Добавить нарезанный банан.'},
         { id: 'b2', type: 'b', n: 'Сырники ПП', i: [{n:'Творог 5%', f:150, m:220}, {n:'Яйцо куриное (1шт=55г)', f:55, m:55}, {n:'Овсянка (сухая)', f:20, m:40}], d: 'Творог смешать с яйцом и молотой овсянкой. Обжарить на сухой сковороде.'},
-        { id: 'b3', type: 'b', n: 'Омлет с шампиньонами', i: [{n:'Яйцо куриное (1шт=55г)', f:110, m:165}, {n:'Шампиньоны', f:100, m:150}, {n:'Помидоры', f:100, m:100}], d: 'Грибы и помидоры обжарить (добавить чеснок). Залить взбитыми яйцами.'},
-        { id: 'b4', type: 'b', n: 'Лаваш с яйцом и сыром', i: [{n:'Лаваш', f:50, m:80}, {n:'Яйцо куриное (1шт=55г)', f:55, m:110}, {n:'Помидоры', f:50, m:80}], d: 'Яйцо сварить/пожарить. Завернуть в лаваш с помидором.'},
+        { id: 'b3', type: 'b', n: 'Омлет с шампиньонами', i: [{n:'Яйцо куриное (1шт=55г)', f:110, m:165}, {n:'Шампиньоны', f:100, m:150}, {n:'Помидоры', f:100, m:100}], d: 'Грибы и помидоры обжарить (с чесноком). Залить взбитыми яйцами.'},
+        { id: 'b4', type: 'b', n: 'Лаваш с яйцом и овощами', i: [{n:'Лаваш', f:50, m:80}, {n:'Яйцо куриное (1шт=55г)', f:55, m:110}, {n:'Помидоры', f:50, m:80}], d: 'Яйцо сварить/пожарить. Завернуть в лаваш с помидором.'},
         
         { id: 'l1', type: 'l', n: 'Гречка с печенью', i: [{n:'Гречка (сухая)', f:45, m:90}, {n:'Печень куриная', f:150, m:200}, {n:'Морковь', f:50, m:80}], d: 'Гречку сварить. Печень потушить с тертой морковью.'},
         { id: 'l2', type: 'l', n: 'Куриный суп с фасолью', i: [{n:'Куриное бедро', f:120, m:180}, {n:'Фасоль (консерв)', f:100, m:150}, {n:'Морковь', f:50, m:50}, {n:'Цельнозерновой хлеб', f:30, m:60}], d: 'Сварить бульон из бедра. Добавить морковь и фасоль. Варить 10 мин. Подавать с хлебом.'},
@@ -529,7 +537,7 @@
 
         { id: 'd1', type: 'd', n: 'Запеченный хек с салатом', i: [{n:'Хек', f:180, m:250}, {n:'Капуста', f:150, m:200}, {n:'Морковь', f:50, m:100}], d: 'Рыбу запечь в духовке со специями. Сделать салат из капусты и моркови.'},
         { id: 'd2', type: 'd', n: 'Ленивые голубцы', i: [{n:'Куриная грудка', f:150, m:200}, {n:'Рис белый', f:30, m:60}, {n:'Капуста', f:100, m:150}], d: 'Грудку пропустить через мясорубку. Смешать с сырым рисом и капустой. Сформировать котлетки и потушить в томатной воде.'},
-        { id: 'd3', type: 'd', n: 'Скумбрия с рисом', i: [{n:'Скумбрия', f:100, m:150}, {n:'Рис белый', f:35, m:70}, {n:'Огурцы', f:100, m:100}], d: 'Скумбрию запечь (порция меньше, так как она жирная). Рис отварить.'},
+        { id: 'd3', type: 'd', n: 'Скумбрия с рисом', i: [{n:'Скумбрия', f:100, m:150}, {n:'Рис белый', f:35, m:70}, {n:'Огурцы', f:100, m:100}], d: 'Скумбрию запечь. Рис отварить.'},
         { id: 'd4', type: 'd', n: 'Котлеты куриные с гречкой', i: [{n:'Куриная грудка', f:140, m:200}, {n:'Гречка (сухая)', f:40, m:80}, {n:'Кабачки', f:150, m:200}], d: 'Сделать фарш с чесноком, обжарить котлеты. Гречку сварить. Кабачки потушить.'},
 
         { id: 's1', type: 's', n: 'Творог с персиком', i: [{n:'Творог 5%', f:100, m:150}, {n:'Персики', f:100, m:150}], d: 'Смешать.'},
@@ -541,7 +549,7 @@
     let selectedDate = new Date().toISOString().split('T')[0];
     let plannerCurrentMonday = getMonday(new Date());
 
-    let state = JSON.parse(localStorage.getItem('ff_state_v6')) || {
+    let state = JSON.parse(localStorage.getItem('ff_state_v7')) || {
         menu: {}, 
         diary: { sonya: {}, andrey: {} },
         water: { sonya: {}, andrey: {} },
@@ -551,7 +559,7 @@
         progress: [] 
     };
 
-    function saveState() { localStorage.setItem('ff_state_v6', JSON.stringify(state)); }
+    function saveState() { localStorage.setItem('ff_state_v7', JSON.stringify(state)); }
 
     function getMonday(d) {
         d = new Date(d);
@@ -565,7 +573,6 @@
         return result;
     }
 
-    // Профессиональный расчет макросов по базе продуктов
     function calcRecipeMacros(recipe, person) {
         let k=0, p=0, f=0, c=0;
         recipe.i.forEach(ing => {
@@ -581,14 +588,13 @@
         return { k: Math.round(k), p: Math.round(p), f: Math.round(f), c: Math.round(c) };
     }
 
-    // Инициализация
+    // --- STREAMING_CHUNK:Rendering Dashboard logic... ---
     document.addEventListener('DOMContentLoaded', () => {
         initProgMonthSelect();
         switchActiveProfile(activeProfile); 
         switchTab('daily'); 
     });
 
-    // Навигация
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -602,7 +608,6 @@
         else if (tabId === 'progress') renderProgress();
     }
 
-    // Поповер профиля
     function toggleProfileMenu() {
         const menu = document.getElementById('profileMenu');
         menu.classList.toggle('active');
@@ -630,7 +635,7 @@
     }
 
     function renderDaily() {
-        renderCalendar(); // Обновляем календарь вокруг выбранной даты
+        renderCalendar(); 
         
         const p = activeProfile;
         
@@ -678,12 +683,10 @@
             }
         });
 
-        // Кастомная еда
         const customBox = document.getElementById(`customMealsList`);
         customBox.innerHTML = '';
         dayCustom.forEach((c, idx) => {
             totalKcal += c.kcal;
-            // Аппроксимируем макросы для кастомной еды (если введено вручную)
             totalP += c.p || Math.round((c.kcal * 0.2) / 4);
             totalF += c.f || Math.round((c.kcal * 0.3) / 9);
             totalC += c.cb || Math.round((c.kcal * 0.5) / 4);
@@ -699,20 +702,18 @@
             `;
         });
 
-        // Расчет Дашборда БЖУ
+        // Дашборд БЖУ
         const maxKcal = p === 'sonya' ? 1350 : 2000;
         const targetP = p === 'sonya' ? 100 : 140;
         const targetF = p === 'sonya' ? 45 : 65;
         const targetC = p === 'sonya' ? 135 : 210;
         
         const left = maxKcal - totalKcal;
-        
         const leftEl = document.getElementById(`kcalLeft`);
         leftEl.innerText = left;
         leftEl.style.color = left < 0 ? 'var(--apple-red)' : 'var(--apple-text)';
         document.getElementById(`kcalGoal`).innerText = maxKcal;
         
-        // Обновление полосок макросов
         document.getElementById('pEat').innerText = totalP; document.getElementById('pTarget').innerText = targetP;
         document.getElementById('fEat').innerText = totalF; document.getElementById('fTarget').innerText = targetF;
         document.getElementById('cEat').innerText = totalC; document.getElementById('cTarget').innerText = targetC;
@@ -721,7 +722,6 @@
         document.getElementById('fBar').style.width = Math.min((totalF / targetF) * 100, 100) + '%';
         document.getElementById('cBar').style.width = Math.min((totalC / targetC) * 100, 100) + '%';
         
-        // Красные полоски при переборе
         document.getElementById('pBar').style.backgroundColor = totalP > targetP ? 'var(--apple-red)' : '#FF2D55';
         document.getElementById('fBar').style.backgroundColor = totalF > targetF ? 'var(--apple-red)' : '#FF9500';
         document.getElementById('cBar').style.backgroundColor = totalC > targetC ? 'var(--apple-red)' : '#34C759';
@@ -729,13 +729,12 @@
         renderWorkoutBox();
     }
 
-    // БЕСКОНЕЧНЫЙ КАЛЕНДАРЬ
+    // --- STREAMING_CHUNK:Rendering Calendar and Workout Loop... ---
     function renderCalendar() {
         const calBox = document.getElementById(`daily-calendar`);
         calBox.innerHTML = '';
         const centerDate = new Date(selectedDate);
         
-        // Кнопка для выбора любой даты (до 2026 года)
         calBox.innerHTML += `
             <div class="calendar-day shrink-0 cursor-pointer border border-gray-200 bg-white flex items-center justify-center relative shadow-sm h-[70px]">
                 <input type="date" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="selectDate(this.value)" min="2024-01-01" max="2026-12-31">
@@ -744,7 +743,6 @@
             </div>
         `;
         
-        // Генерируем 14 дней вокруг выбранной даты
         for(let i = -7; i <= 7; i++) {
             const d = new Date(centerDate);
             d.setDate(centerDate.getDate() + i);
@@ -761,7 +759,6 @@
             `;
         }
         
-        // Плавно скроллим к выбранному дню
         setTimeout(() => {
             const activeEl = document.getElementById(`calday-${selectedDate}`);
             if(activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -786,9 +783,9 @@
         saveState(); renderDaily();
     }
 
-    // Авто-расчет тренировки по дате (зацикливание)
+    // Авто-расчет тренировки
     function getDefaultWorkout(dateStr, profile) {
-        const startDate = new Date('2024-01-01'); // Отсчет цикла
+        const startDate = new Date('2024-01-01');
         const targetDate = new Date(dateStr);
         const diffTime = Math.abs(targetDate - startDate);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -801,7 +798,6 @@
         const p = activeProfile;
         const wList = WORKOUTS[p];
         
-        // Получаем ручной выбор или берем автоматический по кругу
         const manualSelection = state.workouts[p][selectedDate];
         const isRestDay = manualSelection === 'rest';
         
@@ -814,7 +810,6 @@
             currentW = getDefaultWorkout(selectedDate, p);
         }
 
-        // Генерируем опции для селекта замены
         let opts = `<option value="auto" ${!manualSelection ? 'selected' : ''}>По плану (${getDefaultWorkout(selectedDate, p).title})</option>`;
         opts += `<option value="rest" ${isRestDay ? 'selected' : ''}>🌴 Выходной (отдых)</option>`;
         wList.forEach(w => opts += `<option value="${w.id}" ${manualSelection === w.id ? 'selected' : ''}>${w.title}</option>`);
@@ -839,8 +834,7 @@
 
         box.innerHTML = `
             <div class="flex justify-between items-center mb-3">
-                <h4 class="font-bold text-[16px]">Тренировка</h4>
-                <select class="ios-select !bg-gray-100 !py-1 !px-2 !text-[13px] !rounded-lg !w-auto max-w-[150px]" onchange="setWorkout(this.value)">
+                <select class="ios-select !bg-gray-100 !py-1 !px-2 !text-[13px] !rounded-lg w-full" onchange="setWorkout(this.value)">
                     ${opts}
                 </select>
             </div>
@@ -858,7 +852,7 @@
         renderDaily(); 
     }
 
-    // --- ВКЛАДКА 2: МЕНЮ (ОБЩАЯ) ---
+    // --- STREAMING_CHUNK:Menu Builder and Shopping List... ---
     function changePlannerWeek(offset) {
         plannerCurrentMonday = addDays(plannerCurrentMonday, offset * 7);
         renderWeeklyPlanner();
@@ -881,7 +875,7 @@
 
     function renderWeeklyPlanner() {
         const endSun = addDays(plannerCurrentMonday, 6);
-        const options = { month: 'long', day: 'numeric', year: 'numeric' }; // Добавил год
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
         document.getElementById('plannerWeekLabel').innerText = `${plannerCurrentMonday.toLocaleDateString('ru-RU', options)} — ${endSun.toLocaleDateString('ru-RU', options)}`;
 
         const grid = document.getElementById('weeklyPlannerGrid');
@@ -920,7 +914,6 @@
         if(selectedDate === date) renderDaily(); 
     }
 
-    // --- ВКЛАДКА 3: ПОКУПКИ ---
     function calcShoppingList() {
         const map = {};
         for(let i=0; i<7; i++) {
@@ -961,7 +954,7 @@
         });
     }
 
-    // --- ВКЛАДКА 4: ПРОГРЕСС ---
+    // --- STREAMING_CHUNK:Progress and Media uploads... ---
     function renderProgress() {
         const tbody = document.getElementById('progressStatsTable');
         tbody.innerHTML = '';
@@ -1085,6 +1078,7 @@
         renderProgressGallery(); 
     }
 
+    // --- STREAMING_CHUNK:Modals and Custom Foods... ---
     function openCustomFoodModal() {
         document.getElementById('customFoodModal').classList.add('active');
         document.getElementById('customFoodSearch').value = '';
